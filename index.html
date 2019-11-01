@@ -1,0 +1,392 @@
+<!--
+7 tarjetas
+
+tres veces el mismo numero en el dado, te vas a la carcel
+para sair de la carcel hay tres formas, pagando, que te salgan los mismos numeros en los dados, con una tarjeta que sale en el arca comunal
+-->
+
+<html>
+	<head>
+		<title>MONOPOLY</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+
+	<body style="font-family:Arial;">
+		<center>
+			<h1 class="titulo">MONOPOLY</h1>
+			<h5 class="subtitulo">Clásico juego de mesa adaptado al entorno web, con la posibilidad de jugar contra una inteligencia artificial o contra otro ser humano en línea.</h5>
+			<input type="text" placeholder="Introduce tu nick" id="nick"/>
+			<button class="start-online" onclick="online()">Jugar en línea</button>
+			<button class="start-offline" onclick="offline()">Jugar contra la IA</button><br/><br/>
+			<div class="state" id="game-state"></div><br/>
+			<table>
+				<tr>
+					<td>
+						<center>
+							<img src="jugador0.png" width="50" />
+							<p id="player1-name">JUGADOR 1</p>
+							<p id="player1-money">DINERO: </p>
+							<button class="comando" id="tirardados0" onclick="tirarDados()">Tirar dados</button>
+							<button class="comando" id="comprarpropiedad0" onclick="">Comprar propiedad</button>
+							<button class="comando" id="colocarcasa0" onclick="">Colocar casa</button>
+						</center>
+					</td>
+					<td><canvas id="player1-cards" width="200" height="650"></canvas></td>
+					<td class="tablero"><canvas id="game" width="650" height="650"></canvas></td>
+					<td><canvas id="player2-cards" width="200" height="650"></canvas></td>
+					<td>
+						<center>
+							<img src="jugador1.png" width="50" />
+							<p id="player2-name">JUGADOR 2</p>
+							<p id="player2-money">DINERO: </p>
+							<button class="comando" id="tirardados1" onclick="tirarDados()">Tirar dados</button>
+							<button class="comando" id="comprarpropiedad1" onclick="">Comprar propiedad</button>
+							<button class="comando" id="colocarcasa1" onclick="">Colocar casa</button>
+						</center>
+					</td>
+				</tr>
+			</table>
+			<h5>ALUMNOS:<br/>
+				<ul>
+					<li>Uriel García Rivas</li>
+					<li>Mike</li>
+					<li>Mau</li>
+					<li>Erika</li>
+				</ul>
+			</h5>
+		</center>
+	</body>
+</html>
+
+<!-- ==================== MAIN ====================== -->
+<script type="text/javascript">
+	var _CANVGAME_ = document.getElementById("game");
+	var _CTXGAME_ = _CANVGAME_.getContext("2d");
+	var _CANVCARDS1_ = document.getElementById("player1-cards");
+	var _CTXCARDS1_ = _CANVCARDS1_.getContext("2d");
+	var _CANVCARDS2_ = document.getElementById("player2-cards");
+	var _CTXCARDS2_ = _CANVCARDS2_.getContext("2d");
+	var _GAMESTATUS_ = document.getElementById("game-state");
+	_GAMESTATUS_.style.display = "none";
+	var _BUSCANDORIVAL_;
+	var _DADO1_ = new Image;
+	var _DADO2_ = new Image;
+	var _JUGADORAS_ = new Array();
+	_JUGADORAS_.push({x:"600", y:"580", w:"30", h:"30", dinero:"200", img: {}, casilla:"0", nombre: "JUGADOR 1"});
+	_JUGADORAS_.push({x:"600", y:"610", w:"30", h:"25", dinero:"200", img: {}, casilla:"0", nombre: "JUGADOR 2"});
+	_JUGADORAS_[0].img = new Image;
+	_JUGADORAS_[1].img = new Image;
+
+	function online(){
+		_GAMESTATUS_.innerHTML = "Buscando rival";
+		clearInterval(_BUSCANDORIVAL_);
+		var text = "Buscado rival";
+		var flagpuntitos = 0;
+		_BUSCANDORIVAL_ = setInterval(function(){
+			text = "Buscando rival";
+			_GAMESTATUS_.style.display = "block";
+			if(flagpuntitos == 0){flagpuntitos++;}
+			else if(flagpuntitos == 1){text += "."; flagpuntitos++;}
+			else if(flagpuntitos == 2){text += ".."; flagpuntitos++;}
+			else if(flagpuntitos == 3){text += "..."; flagpuntitos = 0;}
+			_GAMESTATUS_.innerHTML = text;
+		}, 500);
+		startGameOnline();
+	}
+
+	function offline(){
+		clearInterval(_BUSCANDORIVAL_);
+		_GAMESTATUS_.style.display = "block";
+		_GAMESTATUS_.innerHTML = "Juego en curso. Rival: Inteligencia artificial.";
+		startGameOffline();
+	}
+
+	function drawCards(){
+		_CTXCARDS1_.fillStyle = "#ececec";
+		_CTXCARDS1_.fillRect(0,0, 100, 150);
+		_CTXCARDS1_.stroke();
+		_CTXCARDS1_.fillRect(100,150, 200, 150);
+		_CTXCARDS1_.stroke();
+		_CTXCARDS1_.fillRect(0,300, 100, 150);
+		_CTXCARDS1_.stroke();
+		_CTXCARDS1_.fillRect(100,150, 200, 150);
+		_CTXCARDS1_.stroke();
+	}
+
+	drawCards();
+</script>
+<!-- ================================================ -->
+
+<!-- ==================== GAME ====================== -->
+<script type="text/javascript">
+	var _TURNO_ = 0;
+	var _DADOS_ = 0;
+	var _GAMESTATE_ = new Array(40);
+
+	function flipBit(bit){
+		if(bit == 0) return 1;
+		else return 0;
+	}
+
+	function cambiaTurno(){
+		if(_TURNO_ == 0) _TURNO_ = 1;
+		else _TURNO_ = 0;
+	}
+
+	function deshabilita(nom, val){
+		document.getElementById(nom).disabled = val;
+		if(val) document.getElementById(nom).setAttribute("class", "disabled");
+		else document.getElementById(nom).setAttribute("class", "comando");
+	}
+
+	function habilitaBotones(){
+		if(_TURNO_ == 0){
+			document.getElementById("tirardados0").disabled = false;
+			document.getElementById("comprarpropiedad0").disabled = false;
+			document.getElementById("colocarcasa0").disabled = false;
+			document.getElementById("tirardados0").setAttribute("class", "comando");
+			document.getElementById("comprarpropiedad0").setAttribute("class", "comando");
+			document.getElementById("colocarcasa0").setAttribute("class", "comando");
+
+			document.getElementById("tirardados1").disabled = true;
+			document.getElementById("comprarpropiedad1").disabled = true;
+			document.getElementById("colocarcasa1").disabled = true;
+			document.getElementById("tirardados1").setAttribute("class", "disabled");
+			document.getElementById("comprarpropiedad1").setAttribute("class", "disabled");
+			document.getElementById("colocarcasa1").setAttribute("class", "disabled");
+		}
+		else{
+			document.getElementById("tirardados0").disabled = true;
+			document.getElementById("comprarpropiedad0").disabled = true;
+			document.getElementById("colocarcasa0").disabled = true;
+			document.getElementById("tirardados0").setAttribute("class", "disabled");
+			document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
+			document.getElementById("colocarcasa0").setAttribute("class", "disabled");
+
+			document.getElementById("tirardados1").disabled = false;
+			document.getElementById("comprarpropiedad1").disabled = false;
+			document.getElementById("colocarcasa1").disabled = false;
+			document.getElementById("tirardados1").setAttribute("class", "comando");
+			document.getElementById("comprarpropiedad1").setAttribute("class", "comando");
+			document.getElementById("colocarcasa1").setAttribute("class", "comando");
+		}
+	}
+
+	function actualizaPrints(){
+		document.getElementById("player1-money").innerHTML = "DINERO: "+_JUGADORAS_[0].dinero;
+		document.getElementById("player2-money").innerHTML = "DINERO: "+_JUGADORAS_[1].dinero;
+		var texto = "Turno: "+_JUGADORAS_[_TURNO_].nombre;
+		_CTXGAME_.clearRect(100, 525, 450, 17);
+		_CTXGAME_.fillText(texto, 100, 540);
+		_CTXGAME_.stroke();
+	}
+
+	function startANewGame(){
+		_JUGADORAS_[0].nombre = document.getElementById("nick").value;
+		_JUGADORAS_[1].nombre = "Inteligencia Artificial";
+		_JUGADORAS_[0].dinero = 200;
+		_JUGADORAS_[1].dinero = 200;
+		for (var i = 0; i < 40; i++){
+			_GAMESTATE_[i] = new Array(3);
+			if(i == 0) _GAMESTATE_[i][0] = "ab";
+			else _GAMESTATE_[i][0] = "";
+			_GAMESTATE_[i][1] = 0;
+			_GAMESTATE_[i][2] = 0;
+		}
+		_DADO1_.src = "dado1.png";
+		_DADO1_.onload = function(){
+			_CTXGAME_.drawImage(_DADO1_, 250, 350, 50, 50);
+			_CTXGAME_.stroke();
+		}
+		_DADO2_.src = "dado2.png";
+		_DADO2_.onload = function(){
+			_CTXGAME_.drawImage(_DADO2_, 300, 350, 50, 50);
+			_CTXGAME_.stroke();
+		}
+		_JUGADORAS_[0].img.src = "jugador0.png";
+		_JUGADORAS_[0].img.onload = function(){
+			_CTXGAME_.drawImage(_JUGADORAS_[0].img, _JUGADORAS_[0].x, _JUGADORAS_[0].y, _JUGADORAS_[0].w, _JUGADORAS_[0].h);
+			_CTXGAME_.stroke();
+		}
+		_JUGADORAS_[1].img.src = "jugador1.png";
+		_JUGADORAS_[1].img.onload = function(){
+			_CTXGAME_.drawImage(_JUGADORAS_[1].img, _JUGADORAS_[1].x, _JUGADORAS_[1].y, _JUGADORAS_[1].w, _JUGADORAS_[1].h);
+			_CTXGAME_.stroke();
+		}
+		_CTXGAME_.font = "15px Arial";
+		habilitaBotones();
+		actualizaPrints();
+	}
+
+	function tirarDados(){
+		var dadouno = Math.floor(Math.random() * 6) + 1;
+		var dadodos = Math.floor(Math.random() * 6) + 1;
+		_DADOS_ = dadouno+dadodos;
+		_DADO1_.src = "dado"+dadouno+".png";
+		_DADO1_.onload = function(){
+			_CTXGAME_.drawImage(_DADO1_, 250, 350, 50, 50);
+			_CTXGAME_.stroke();
+		}
+
+		_DADO2_.src = "dado"+dadodos+".png";
+		_DADO2_.onload = function(){
+			_CTXGAME_.drawImage(_DADO2_, 300, 350, 50, 50);
+			_CTXGAME_.stroke();
+		}
+		moverPieza();
+		deshabilita("tirardados"+_TURNO_, true);
+	}
+
+	function moverPieza(){
+		var cas = parseInt(_JUGADORAS_[_TURNO_].casilla);
+		var loop;
+		var loop2;
+		var aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
+		var aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
+		var corte = 0;
+		var iteracion = 10;
+		loop2 = setInterval(function(){
+			if(corte == _DADOS_){
+				cambiaTurno();
+				habilitaBotones();
+				actualizaPrints();
+				clearInterval(loop2);
+			}
+		}, 500);
+		loop = setInterval(function(){
+			_CTXGAME_.clearRect(_JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+			_JUGADORAS_[_TURNO_].img.src = "jugador"+_TURNO_+".png";
+			if(cas == 0){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					aux_x -= 85;
+					_JUGADORAS_[_TURNO_].x = aux_x.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas > 0 && cas < 10){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					if(cas == 9){if(_TURNO_==0) aux_x -= 63; else aux_x -= 73;}
+					else aux_x -= 51;
+					_JUGADORAS_[_TURNO_].x = aux_x.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas == 10){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					if(_TURNO_==0) aux_y -= 63; else aux_y -= 73;
+					_JUGADORAS_[_TURNO_].y = aux_y.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas >= 10 && cas < 20){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					if(cas == 19){if(_TURNO_==0) aux_y -= 63; else aux_y -= 73;}
+					else aux_y -= 51;
+					_JUGADORAS_[_TURNO_].y = aux_y.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas == 20){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					aux_x += 65;
+					_JUGADORAS_[_TURNO_].x = aux_x.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas > 20 && cas < 30){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					aux_x += 51;
+					_JUGADORAS_[_TURNO_].x = aux_x.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas == 30){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					aux_y += 51;
+					_JUGADORAS_[_TURNO_].y = aux_y.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas > 30 && cas < 39){
+				_JUGADORAS_[_TURNO_].img.onload = function(){
+					aux_y += 51;
+					_JUGADORAS_[_TURNO_].y = aux_y.toString();
+					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else{
+				if(_TURNO_ == 0){
+					_JUGADORAS_[_TURNO_].img.onload = function(){
+						_JUGADORAS_[_TURNO_].x = 600;
+						_JUGADORAS_[_TURNO_].y = 580;
+						aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
+						aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
+						_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+						_CTXGAME_.stroke();
+					}
+				}
+				else{
+					_JUGADORAS_[_TURNO_].img.onload = function(){
+						_JUGADORAS_[_TURNO_].x = 600;
+						_JUGADORAS_[_TURNO_].y = 610;
+						aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
+						aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
+						_JUGADORAS_[_TURNO_].y = aux_y.toString();
+						_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+						_CTXGAME_.stroke();
+					}
+				}
+				cas = 0;
+			}
+			corte++;
+			_JUGADORAS_[_TURNO_].casilla = cas.toString();
+			if(corte == _DADOS_) clearInterval(loop);
+		}, 500);
+	}
+
+	function startGameOffline(){
+		startANewGame();
+		document.getElementById("tirardados1").style.display = "none";
+		document.getElementById("comprarpropiedad1").style.display = "none";
+		document.getElementById("colocarcasa1").style.display = "none";
+		document.getElementById("player1-name").innerHTML = document.getElementById("nick").value;
+		document.getElementById("player2-name").innerHTML = "Inteligencia Artificial";
+	}
+
+	function startGameOnline(){
+		startANewGame();
+		document.getElementById("tirardados1").style.display = "block";
+		document.getElementById("comprarpropiedad1").style.display = "block";
+		document.getElementById("colocarcasa1").style.display = "block";
+		document.getElementById("player1-name").innerHTML = document.getElementById("nick").value;
+	}
+</script>
+<!-- ================================================ -->
+
+<!-- =================== ONLINE ===================== -->
+<script type="application/javascript">
+
+</script>
+<!-- ================================================ -->
+
+<!-- ===================== IA ======================= -->
+<script type="text/javascript">
+	var _TURNOSIMULADO_ = _TURNO_;
+</script>
+<!-- ================================================ -->
