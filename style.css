@@ -1,0 +1,40 @@
+.titulo {
+	color: white;
+	text-shadow: 0px 0px 3px #000000;
+}
+
+.subtitulo {
+	color: gray;
+}
+
+.start-online{
+	background-color:#08ab01;
+	color:#FFFFFF;
+}
+
+.start-offline{
+	background-color:#00c4b3;
+	color:#FFFFFF;
+}
+
+.comando{
+	background-color:#000000;
+	color:#FFFFFF;
+}
+
+.disabled {
+	background-color:#000000;
+	color:#565656;
+}
+
+.tablero {
+	background-image: url("tablero.jpg");
+	background-repeat: no-repeat;
+	background-size: 650px 650px;
+}
+
+button{
+	border:0;
+	padding:10px;
+	border-radius:10px;
+}
