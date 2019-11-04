@@ -26,9 +26,9 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 							<img src="jugador0.png" width="50" />
 							<p id="player1-name">JUGADOR 1</p>
 							<p id="player1-money">DINERO: </p>
-							<button class="comando" id="tirardados0" onclick="tirarDados()">Tirar dados</button>
-							<button class="comando" id="comprarpropiedad0" onclick="">Comprar propiedad</button>
-							<button class="comando" id="colocarcasa0" onclick="">Colocar casa</button>
+							<input type="button" class="comando" id="tirardados0" onclick="tirarDados()" value="Tirar dados" />
+							<input type="button" class="comando" id="comprarpropiedad0" onclick="comprarPropiedad()" value="Comprar propiedad" />
+							<input type="button" class="comando" id="colocarcasa0" onclick="colocarCasa()" value="Colocar casa" />
 						</center>
 					</td>
 					<td><canvas id="player1-cards" width="200" height="650"></canvas></td>
@@ -39,9 +39,9 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 							<img src="jugador1.png" width="50" />
 							<p id="player2-name">JUGADOR 2</p>
 							<p id="player2-money">DINERO: </p>
-							<button class="comando" id="tirardados1" onclick="tirarDados()">Tirar dados</button>
-							<button class="comando" id="comprarpropiedad1" onclick="">Comprar propiedad</button>
-							<button class="comando" id="colocarcasa1" onclick="">Colocar casa</button>
+							<input type="button" class="comando" id="tirardados1" onclick="tirarDados()" value="Tirar dados" />
+							<input type="button" class="comando" id="comprarpropiedad1" onclick="comprarPropiedad()" value="Comprar propiedad" />
+							<input type="button" class="comando" id="colocarcasa1" onclick="colocarCasa()" value="Colocar casa" />
 						</center>
 					</td>
 				</tr>
@@ -121,7 +121,48 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 <script type="text/javascript">
 	var _TURNO_ = 0;
 	var _DADOS_ = 0;
-	var _GAMESTATE_ = new Array(40);
+	var _BOARD_ = new Array();
+	_BOARD_.push({id:"0", precio:"200", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"1", precio:"50", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"1", precio:"60", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"1", precio:"60", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"1", precio:"110", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"2", precio:"100", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"2", precio:"100", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"2", precio:"120", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"3", precio:"160", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"4", precio:"400", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"4", precio:"75", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"4", precio:"110", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"4", precio:"200", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"5", precio:"250", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"5", precio:"220", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"5", precio:"220", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"6", precio:"240", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"6", precio:"260", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"6", precio:"280", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"", precio:"400", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"6", precio:"300", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"7", precio:"320", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"7", precio:"320", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"7", precio:"380", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"7", precio:"380", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"8", precio:"450", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"0", precio:"150", duenio:"-1", noCasas: "0"});
+	_BOARD_.push({id:"8", precio:"500", duenio:"-1", noCasas: "0"});
+	var _VARIOSTURNOS_ = 0;
 
 	function flipBit(bit){
 		if(bit == 0) return 1;
@@ -139,14 +180,47 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		else document.getElementById(nom).setAttribute("class", "comando");
 	}
 
+	function deshabilitaTodo(){
+		document.getElementById("tirardados0").disabled = true;
+		document.getElementById("comprarpropiedad0").disabled = true;
+		document.getElementById("colocarcasa0").disabled = true;
+		document.getElementById("tirardados0").setAttribute("class", "disabled");
+		document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
+		document.getElementById("colocarcasa0").setAttribute("class", "disabled");
+		document.getElementById("tirardados1").disabled = true;
+		document.getElementById("comprarpropiedad1").disabled = true;
+		document.getElementById("colocarcasa1").disabled = true;
+		document.getElementById("tirardados1").setAttribute("class", "disabled");
+		document.getElementById("comprarpropiedad1").setAttribute("class", "disabled");
+		document.getElementById("colocarcasa1").setAttribute("class", "disabled");
+	}
+
 	function habilitaBotones(){
 		if(_TURNO_ == 0){
-			document.getElementById("tirardados0").disabled = false;
-			document.getElementById("comprarpropiedad0").disabled = false;
-			document.getElementById("colocarcasa0").disabled = false;
-			document.getElementById("tirardados0").setAttribute("class", "comando");
-			document.getElementById("comprarpropiedad0").setAttribute("class", "comando");
-			document.getElementById("colocarcasa0").setAttribute("class", "comando");
+			if(_VARIOSTURNOS_ == 0){
+				document.getElementById("tirardados0").disabled = true;
+				document.getElementById("tirardados0").setAttribute("class", "disabled");
+			}
+			else{
+				document.getElementById("tirardados0").disabled = false;
+				document.getElementById("tirardados0").setAttribute("class", "comando");
+			}
+			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio > parseInt(_JUGADORAS_[_TURNO_].dinero)){
+				document.getElementById("comprarpropiedad0").disabled = true;
+				document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
+			}
+			else{
+				document.getElementById("comprarpropiedad0").disabled = false;
+				document.getElementById("comprarpropiedad0").setAttribute("class", "comando");
+			}
+			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio == "1"){
+				document.getElementById("colocarcasa0").disabled = false;
+				document.getElementById("colocarcasa0").setAttribute("class", "comando");
+			}
+			else{
+				document.getElementById("colocarcasa0").disabled = true;
+				document.getElementById("colocarcasa0").setAttribute("class", "disabled");
+			}
 
 			document.getElementById("tirardados1").disabled = true;
 			document.getElementById("comprarpropiedad1").disabled = true;
@@ -163,12 +237,30 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 			document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
 			document.getElementById("colocarcasa0").setAttribute("class", "disabled");
 
-			document.getElementById("tirardados1").disabled = false;
-			document.getElementById("comprarpropiedad1").disabled = false;
-			document.getElementById("colocarcasa1").disabled = false;
-			document.getElementById("tirardados1").setAttribute("class", "comando");
-			document.getElementById("comprarpropiedad1").setAttribute("class", "comando");
-			document.getElementById("colocarcasa1").setAttribute("class", "comando");
+			if(_VARIOSTURNOS_ == 0){
+				document.getElementById("tirardados1").disabled = true;
+				document.getElementById("tirardados1").setAttribute("class", "disabled");
+			}
+			else{
+				document.getElementById("tirardados1").disabled = false;
+				document.getElementById("tirardados1").setAttribute("class", "comando");
+			}
+			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio < parseInt(_JUGADORAS_[_TURNO_].dinero)){
+				document.getElementById("comprarpropiedad1").disabled = true;
+				document.getElementById("comprarpropiedad1").setAttribute("class", "disabled");
+			}
+			else{
+				document.getElementById("comprarpropiedad1").disabled = false;
+				document.getElementById("comprarpropiedad1").setAttribute("class", "comando");
+			}
+			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio == "1"){
+				document.getElementById("colocarcasa1").disabled = false;
+				document.getElementById("colocarcasa1").setAttribute("class", "comando");
+			}
+			else{
+				document.getElementById("colocarcasa1").disabled = true;
+				document.getElementById("colocarcasa1").setAttribute("class", "disabled");
+			}
 		}
 	}
 
@@ -176,23 +268,56 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		document.getElementById("player1-money").innerHTML = "DINERO: "+_JUGADORAS_[0].dinero;
 		document.getElementById("player2-money").innerHTML = "DINERO: "+_JUGADORAS_[1].dinero;
 		var texto = "Turno: "+_JUGADORAS_[_TURNO_].nombre;
-		_CTXGAME_.clearRect(100, 525, 450, 17);
+		_CTXGAME_.clearRect(100, 525, 450, 20);
 		_CTXGAME_.fillText(texto, 100, 540);
 		_CTXGAME_.stroke();
 	}
 
 	function startANewGame(){
-		_JUGADORAS_[0].nombre = document.getElementById("nick").value;
-		_JUGADORAS_[1].nombre = "Inteligencia Artificial";
+		_JUGADORAS_[0].nombre = document.getElementById("player1-name").innerHTML;
+		_JUGADORAS_[1].nombre = document.getElementById("player2-name").innerHTML;
 		_JUGADORAS_[0].dinero = 200;
 		_JUGADORAS_[1].dinero = 200;
-		for (var i = 0; i < 40; i++){
-			_GAMESTATE_[i] = new Array(3);
-			if(i == 0) _GAMESTATE_[i][0] = "ab";
-			else _GAMESTATE_[i][0] = "";
-			_GAMESTATE_[i][1] = 0;
-			_GAMESTATE_[i][2] = 0;
-		}
+		_BOARD_[0] = {id:"0", precio:"200", duenio:"-1", noCasas: "0"};
+		_BOARD_[1] = {id:"1", precio:"50", duenio:"-1", noCasas: "0"};
+		_BOARD_[2] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[3] = {id:"1", precio:"60", duenio:"-1", noCasas: "0"};
+		_BOARD_[4] = {id:"1", precio:"60", duenio:"-1", noCasas: "0"};
+		_BOARD_[5] = {id:"1", precio:"110", duenio:"-1", noCasas: "0"};
+		_BOARD_[6] = {id:"2", precio:"100", duenio:"-1", noCasas: "0"};
+		_BOARD_[7] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[8] = {id:"2", precio:"100", duenio:"-1", noCasas: "0"};
+		_BOARD_[9] = {id:"2", precio:"120", duenio:"-1", noCasas: "0"};
+		_BOARD_[10] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[11] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
+		_BOARD_[12] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
+		_BOARD_[13] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
+		_BOARD_[14] = {id:"3", precio:"160", duenio:"-1", noCasas: "0"};
+		_BOARD_[15] = {id:"9", precio:"400", duenio:"-1", noCasas: "0"};
+		_BOARD_[16] = {id:"4", precio:"75", duenio:"-1", noCasas: "0"};
+		_BOARD_[17] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[18] = {id:"4", precio:"110", duenio:"-1", noCasas: "0"};
+		_BOARD_[19] = {id:"4", precio:"200", duenio:"-1", noCasas: "0"};
+		_BOARD_[20] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[21] = {id:"5", precio:"250", duenio:"-1", noCasas: "0"};
+		_BOARD_[22] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[23] = {id:"5", precio:"220", duenio:"-1", noCasas: "0"};
+		_BOARD_[24] = {id:"5", precio:"220", duenio:"-1", noCasas: "0"};
+		_BOARD_[25] = {id:"6", precio:"240", duenio:"-1", noCasas: "0"};
+		_BOARD_[26] = {id:"6", precio:"260", duenio:"-1", noCasas: "0"};
+		_BOARD_[27] = {id:"6", precio:"280", duenio:"-1", noCasas: "0"};
+		_BOARD_[28] = {id:"9", precio:"400", duenio:"-1", noCasas: "0"};
+		_BOARD_[29] = {id:"6", precio:"300", duenio:"-1", noCasas: "0"};
+		_BOARD_[30] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[31] = {id:"7", precio:"320", duenio:"-1", noCasas: "0"};
+		_BOARD_[32] = {id:"7", precio:"320", duenio:"-1", noCasas: "0"};
+		_BOARD_[33] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[34] = {id:"7", precio:"380", duenio:"-1", noCasas: "0"};
+		_BOARD_[35] = {id:"7", precio:"380", duenio:"-1", noCasas: "0"};
+		_BOARD_[36] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
+		_BOARD_[37] = {id:"8", precio:"450", duenio:"-1", noCasas: "0"};
+		_BOARD_[38] = {id:"0", precio:"150", duenio:"-1", noCasas: "0"};
+		_BOARD_[39] = {id:"8", precio:"500", duenio:"-1", noCasas: "0"};
 		_DADO1_.src = "dado1.png";
 		_DADO1_.onload = function(){
 			_CTXGAME_.drawImage(_DADO1_, 250, 350, 50, 50);
@@ -214,13 +339,27 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 			_CTXGAME_.stroke();
 		}
 		_CTXGAME_.font = "15px Arial";
+		_VARIOSTURNOS_ = 1;
 		habilitaBotones();
+		_VARIOSTURNOS_ = 0;
 		actualizaPrints();
+	}
+
+	function comprarPropiedad(){
+		_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio = ""+_TURNO_;
+		_JUGADORAS_[_TURNO_].dinero = ""+(parseInt(_JUGADORAS_[_TURNO_].dinero)-parseInt(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio));
+		actualizaPrints();
+	}
+
+	function colocarCasa(){
+
 	}
 
 	function tirarDados(){
 		var dadouno = Math.floor(Math.random() * 6) + 1;
 		var dadodos = Math.floor(Math.random() * 6) + 1;
+		if(dadouno == dadodos) _VARIOSTURNOS_++;
+		else _VARIOSTURNOS_ = 0;
 		_DADOS_ = dadouno+dadodos;
 		_DADO1_.src = "dado"+dadouno+".png";
 		_DADO1_.onload = function(){
@@ -234,7 +373,17 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 			_CTXGAME_.stroke();
 		}
 		moverPieza();
-		deshabilita("tirardados"+_TURNO_, true);
+		deshabilitaTodo();
+	}
+
+	function irALaCarcel(){
+
+	}
+
+	function revisaEstado(){
+		if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].id != "0") document.getElementById("comprarpropiedad"+_TURNO_).value = "Comprar propiedad (-"+_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio+")";
+		habilitaBotones();
+		actualizaPrints();
 	}
 
 	function moverPieza(){
@@ -247,9 +396,7 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		var iteracion = 10;
 		loop2 = setInterval(function(){
 			if(corte == _DADOS_){
-				cambiaTurno();
-				habilitaBotones();
-				actualizaPrints();
+				revisaEstado();
 				clearInterval(loop2);
 			}
 		}, 500);
@@ -361,20 +508,20 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 	}
 
 	function startGameOffline(){
-		startANewGame();
 		document.getElementById("tirardados1").style.display = "none";
 		document.getElementById("comprarpropiedad1").style.display = "none";
 		document.getElementById("colocarcasa1").style.display = "none";
 		document.getElementById("player1-name").innerHTML = document.getElementById("nick").value;
 		document.getElementById("player2-name").innerHTML = "Inteligencia Artificial";
+		startANewGame();
 	}
 
 	function startGameOnline(){
-		startANewGame();
 		document.getElementById("tirardados1").style.display = "block";
 		document.getElementById("comprarpropiedad1").style.display = "block";
 		document.getElementById("colocarcasa1").style.display = "block";
 		document.getElementById("player1-name").innerHTML = document.getElementById("nick").value;
+		startANewGame();
 	}
 </script>
 <!-- ================================================ -->
