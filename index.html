@@ -25,23 +25,47 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 						<center>
 							<img src="jugador0.png" width="50" />
 							<p id="player1-name">JUGADOR 1</p>
-							<p id="player1-money">DINERO: </p>
-							<input type="button" class="comando" id="tirardados0" onclick="tirarDados()" value="Tirar dados" />
-							<input type="button" class="comando" id="comprarpropiedad0" onclick="comprarPropiedad()" value="Comprar propiedad" />
-							<input type="button" class="comando" id="colocarcasa0" onclick="colocarCasa()" value="Colocar casa" />
+							<p id="player1-money">DINERO: 0 <span class="monopolymoney inline-block">&#8361;</span></p>
+							<input type="button" class="comando" id="tirardados0" onclick="tirarDados()" value="Tirar dados" /><br />
+							<input type="button" class="comando" id="comprarpropiedad0" onclick="comprarPropiedad()" value="Comprar propiedad" /><br />
+							<hr />
+							<div id="propiedadescolocar0"></div>
+							<input type="button" class="comando" id="colocarcasa0" onclick="colocarCasa()" value="Colocar casa" /><br />
+							<input type="button" class="comando" id="colocarhotel0" onclick="" value="Colocar hotel" /><br />
+							<hr />
+							<div id="propiedadesvender0"></div>
+							<input type="button" class="comando" id="vendercasa0" onclick="" value="Vender casa" /><br />
+							<input type="button" class="comando" id="venderhotel0" onclick="" value="Vender hotel" /><br />
+							<hr />
+							<div id="propiedadvender0"></div>
+							<input type="button" class="comando" id="venderpropiedad0" onclick="" value="Vender propiedad" /><br />
+							<hr />
+							<input type="button" class="comando" id="pasar0" onclick="" value="Pasar" /><br />
 						</center>
 					</td>
-					<td><canvas id="player1-cards" width="200" height="650"></canvas></td>
+					<td><!--PROPIEDADES PLAYER 1--></td>
 					<td class="tablero"><canvas id="game" width="650" height="650"></canvas></td>
-					<td><canvas id="player2-cards" width="200" height="650"></canvas></td>
+					<td><!--PROPIEDADES PLAYER 2--></td>
 					<td>
 						<center>
 							<img src="jugador1.png" width="50" />
 							<p id="player2-name">JUGADOR 2</p>
-							<p id="player2-money">DINERO: </p>
-							<input type="button" class="comando" id="tirardados1" onclick="tirarDados()" value="Tirar dados" />
-							<input type="button" class="comando" id="comprarpropiedad1" onclick="comprarPropiedad()" value="Comprar propiedad" />
-							<input type="button" class="comando" id="colocarcasa1" onclick="colocarCasa()" value="Colocar casa" />
+							<p id="player2-money">DINERO: 0 <span class="monopolymoney inline-block">&#8361;</span></p>
+							<input type="button" class="comando" id="tirardados1" onclick="tirarDados()" value="Tirar dados" /><br />
+							<input type="button" class="comando" id="comprarpropiedad1" onclick="comprarPropiedad()" value="Comprar propiedad" /><br />
+							<hr />
+							<div id="propiedadescolocar1"></div><br/>
+							<input type="button" class="comando" id="colocarcasa1" onclick="colocarCasa()" value="Colocar casa" /><br />
+							<input type="button" class="comando" id="colocarhotel1" onclick="" value="Colocar hotel" /><br />
+							<hr />
+							<div id="propiedadesvender1"></div><br/>
+							<input type="button" class="comando" id="vendercasa1" onclick="" value="Vender casa" /><br />
+							<input type="button" class="comando" id="venderhotel1" onclick="" value="Vender hotel" /><br />
+							<hr />
+							<div id="propiedadvender1"></div><br/>
+							<input type="button" class="comando" id="venderpropiedad1" onclick="" value="Vender propiedad" /><br />
+							<hr />
+							<input type="button" class="comando" id="pasar1" onclick="" value="Pasar" /><br />
 						</center>
 					</td>
 				</tr>
@@ -62,18 +86,14 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 <script type="text/javascript">
 	var _CANVGAME_ = document.getElementById("game");
 	var _CTXGAME_ = _CANVGAME_.getContext("2d");
-	var _CANVCARDS1_ = document.getElementById("player1-cards");
-	var _CTXCARDS1_ = _CANVCARDS1_.getContext("2d");
-	var _CANVCARDS2_ = document.getElementById("player2-cards");
-	var _CTXCARDS2_ = _CANVCARDS2_.getContext("2d");
 	var _GAMESTATUS_ = document.getElementById("game-state");
 	_GAMESTATUS_.style.display = "none";
 	var _BUSCANDORIVAL_;
 	var _DADO1_ = new Image;
 	var _DADO2_ = new Image;
 	var _JUGADORAS_ = new Array();
-	_JUGADORAS_.push({x:"600", y:"580", w:"30", h:"30", dinero:"200", img: {}, casilla:"0", nombre: "JUGADOR 1"});
-	_JUGADORAS_.push({x:"600", y:"610", w:"30", h:"25", dinero:"200", img: {}, casilla:"0", nombre: "JUGADOR 2"});
+	_JUGADORAS_.push({x:"600", y:"580", w:"30", h:"30", dinero:"1500", img: {}, casilla:"0", nombre: "JUGADOR 1"});
+	_JUGADORAS_.push({x:"600", y:"610", w:"30", h:"25", dinero:"1500", img: {}, casilla:"0", nombre: "JUGADOR 2"});
 	_JUGADORAS_[0].img = new Image;
 	_JUGADORAS_[1].img = new Image;
 
@@ -100,20 +120,6 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		_GAMESTATUS_.innerHTML = "Juego en curso. Rival: Inteligencia artificial.";
 		startGameOffline();
 	}
-
-	function drawCards(){
-		_CTXCARDS1_.fillStyle = "#ececec";
-		_CTXCARDS1_.fillRect(0,0, 100, 150);
-		_CTXCARDS1_.stroke();
-		_CTXCARDS1_.fillRect(100,150, 200, 150);
-		_CTXCARDS1_.stroke();
-		_CTXCARDS1_.fillRect(0,300, 100, 150);
-		_CTXCARDS1_.stroke();
-		_CTXCARDS1_.fillRect(100,150, 200, 150);
-		_CTXCARDS1_.stroke();
-	}
-
-	drawCards();
 </script>
 <!-- ================================================ -->
 
@@ -122,48 +128,14 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 	var _TURNO_ = 0;
 	var _DADOS_ = 0;
 	var _BOARD_ = new Array();
-	_BOARD_.push({id:"0", precio:"200", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"1", precio:"50", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"1", precio:"60", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"1", precio:"60", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"1", precio:"110", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"2", precio:"100", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"2", precio:"100", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"2", precio:"120", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"3", precio:"140", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"3", precio:"160", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"4", precio:"400", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"4", precio:"75", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"4", precio:"110", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"4", precio:"200", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"5", precio:"250", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"5", precio:"220", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"5", precio:"220", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"6", precio:"240", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"6", precio:"260", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"6", precio:"280", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"", precio:"400", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"6", precio:"300", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"7", precio:"320", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"7", precio:"320", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"7", precio:"380", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"7", precio:"380", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"0", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"8", precio:"450", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"0", precio:"150", duenio:"-1", noCasas: "0"});
-	_BOARD_.push({id:"8", precio:"500", duenio:"-1", noCasas: "0"});
 	var _VARIOSTURNOS_ = 0;
-
+	for(var i = 0; i < 40; i++) _BOARD_.push({});
+	var _PROPIEDADES_ = new Array();
+	_PROPIEDADES_.push(new Array());
+	_PROPIEDADES_.push(new Array());
+	var _OBJETOSPROPIEDADES_ = new Array();
+	_OBJETOSPROPIEDADES_.push(new Array());
+	_OBJETOSPROPIEDADES_.push(new Array());
 	function flipBit(bit){
 		if(bit == 0) return 1;
 		else return 0;
@@ -184,42 +156,66 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		document.getElementById("tirardados0").disabled = true;
 		document.getElementById("comprarpropiedad0").disabled = true;
 		document.getElementById("colocarcasa0").disabled = true;
+		document.getElementById("colocarhotel0").disabled = true;
+		document.getElementById("vendercasa0").disabled = true;
+		document.getElementById("venderhotel0").disabled = true;
+		document.getElementById("venderpropiedad0").disabled = true;
+		document.getElementById("pasar0").disabled = true;
 		document.getElementById("tirardados0").setAttribute("class", "disabled");
 		document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
 		document.getElementById("colocarcasa0").setAttribute("class", "disabled");
+		document.getElementById("colocarhotel0").setAttribute("class", "disabled");
+		document.getElementById("vendercasa0").setAttribute("class", "disabled");
+		document.getElementById("venderhotel0").setAttribute("class", "disabled");
+		document.getElementById("venderpropiedad0").setAttribute("class", "disabled");
+		document.getElementById("pasar0").setAttribute("class", "disabled");
 		document.getElementById("tirardados1").disabled = true;
 		document.getElementById("comprarpropiedad1").disabled = true;
 		document.getElementById("colocarcasa1").disabled = true;
+		document.getElementById("colocarhotel1").disabled = true;
+		document.getElementById("vendercasa1").disabled = true;
+		document.getElementById("venderhotel1").disabled = true;
+		document.getElementById("venderpropiedad1").disabled = true;
+		document.getElementById("pasar0").disabled = true;
 		document.getElementById("tirardados1").setAttribute("class", "disabled");
 		document.getElementById("comprarpropiedad1").setAttribute("class", "disabled");
 		document.getElementById("colocarcasa1").setAttribute("class", "disabled");
+		document.getElementById("colocarhotel1").setAttribute("class", "disabled");
+		document.getElementById("vendercasa1").setAttribute("class", "disabled");
+		document.getElementById("venderhotel1").setAttribute("class", "disabled");
+		document.getElementById("venderpropiedad1").setAttribute("class", "disabled");
+		document.getElementById("pasar1").setAttribute("class", "disabled");
 	}
-
+	function isCambioTurno(){
+		if(document.getElementById("tirardados"+_TURNO_).disabled == true &&
+			document.getElementById("comprarpropiedad"+_TURNO_).disabled == true &&
+			document.getElementById("colocarcasa"+_TURNO_).disabled == true)
+			return true;
+		else return false;
+	}
 	function habilitaBotones(){
+		var Casilla = _BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)];
+		var Jugadora = _JUGADORAS_[_TURNO_];
 		if(_TURNO_ == 0){
 			if(_VARIOSTURNOS_ == 0){
 				document.getElementById("tirardados0").disabled = true;
 				document.getElementById("tirardados0").setAttribute("class", "disabled");
+				document.getElementById("pasar0").disabled = false;
+				document.getElementById("pasar0").setAttribute("class", "comando");
 			}
 			else{
 				document.getElementById("tirardados0").disabled = false;
 				document.getElementById("tirardados0").setAttribute("class", "comando");
+				document.getElementById("pasar0").disabled = true;
+				document.getElementById("pasar0").setAttribute("class", "disabled");
 			}
-			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio > parseInt(_JUGADORAS_[_TURNO_].dinero)){
+			if((parseInt(Casilla.precio) > parseInt(Jugadora.dinero)) || (Casilla.id == "arca") || (Casilla.id == "esquina") || (Casilla.id == "impuestos") || (Casilla.id == "fortuna") || (Casilla.duenio != "-1")){
 				document.getElementById("comprarpropiedad0").disabled = true;
 				document.getElementById("comprarpropiedad0").setAttribute("class", "disabled");
 			}
 			else{
 				document.getElementById("comprarpropiedad0").disabled = false;
 				document.getElementById("comprarpropiedad0").setAttribute("class", "comando");
-			}
-			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio == "1"){
-				document.getElementById("colocarcasa0").disabled = false;
-				document.getElementById("colocarcasa0").setAttribute("class", "comando");
-			}
-			else{
-				document.getElementById("colocarcasa0").disabled = true;
-				document.getElementById("colocarcasa0").setAttribute("class", "disabled");
 			}
 
 			document.getElementById("tirardados1").disabled = true;
@@ -245,7 +241,7 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 				document.getElementById("tirardados1").disabled = false;
 				document.getElementById("tirardados1").setAttribute("class", "comando");
 			}
-			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio < parseInt(_JUGADORAS_[_TURNO_].dinero)){
+			if((parseInt(Casilla.precio) > parseInt(Jugadora.dinero)) || (Casilla.id == "arca") || (Casilla.id == "esquina") || (Casilla.id == "impuestos") || (Casilla.duenio != "-1")){
 				document.getElementById("comprarpropiedad1").disabled = true;
 				document.getElementById("comprarpropiedad1").setAttribute("class", "disabled");
 			}
@@ -253,71 +249,79 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 				document.getElementById("comprarpropiedad1").disabled = false;
 				document.getElementById("comprarpropiedad1").setAttribute("class", "comando");
 			}
-			if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio == "1"){
-				document.getElementById("colocarcasa1").disabled = false;
-				document.getElementById("colocarcasa1").setAttribute("class", "comando");
-			}
-			else{
-				document.getElementById("colocarcasa1").disabled = true;
-				document.getElementById("colocarcasa1").setAttribute("class", "disabled");
-			}
 		}
 	}
 
+	function retornoSelect(nom, turno){
+		var retorno = "<select id='"+nom+"'>";
+		for(var p = 0; p < _PROPIEDADES_[turno].length; p++){
+			retorno += "<option value='"+_PROPIEDADES_[turno][p]+"'>"+_PROPIEDADES_[turno][p]+"</option>";
+		}
+		retorno += "</select>";
+		return retorno;
+	}
+
 	function actualizaPrints(){
-		document.getElementById("player1-money").innerHTML = "DINERO: "+_JUGADORAS_[0].dinero;
-		document.getElementById("player2-money").innerHTML = "DINERO: "+_JUGADORAS_[1].dinero;
+		var objeto;
+		document.getElementById("player1-money").innerHTML = "DINERO: "+_JUGADORAS_[0].dinero+" <span class='monopolymoney inline-block'>&#8361;</span>";
+		document.getElementById("player2-money").innerHTML = "DINERO: "+_JUGADORAS_[1].dinero+" <span class='monopolymoney inline-block'>&#8361;</span>";
 		var texto = "Turno: "+_JUGADORAS_[_TURNO_].nombre;
 		_CTXGAME_.clearRect(100, 525, 450, 20);
 		_CTXGAME_.fillText(texto, 100, 540);
 		_CTXGAME_.stroke();
+		document.getElementById("propiedadescolocar0").innerHTML = retornoSelect("selectcolocar0", 0);
+		document.getElementById("propiedadesvender0").innerHTML = retornoSelect("selectvender0", 0);
+		document.getElementById("propiedadvender0").innerHTML = retornoSelect("selectvender0", 0);
+		document.getElementById("propiedadescolocar1").innerHTML = retornoSelect("selectcolocar1", 1);
+		document.getElementById("propiedadesvender1").innerHTML = retornoSelect("selectvender1", 1);
+		document.getElementById("propiedadvender1").innerHTML = retornoSelect("selectvender1", 1);
 	}
 
 	function startANewGame(){
 		_JUGADORAS_[0].nombre = document.getElementById("player1-name").innerHTML;
 		_JUGADORAS_[1].nombre = document.getElementById("player2-name").innerHTML;
-		_JUGADORAS_[0].dinero = 200;
-		_JUGADORAS_[1].dinero = 200;
-		_BOARD_[0] = {id:"0", precio:"200", duenio:"-1", noCasas: "0"};
-		_BOARD_[1] = {id:"1", precio:"50", duenio:"-1", noCasas: "0"};
-		_BOARD_[2] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[3] = {id:"1", precio:"60", duenio:"-1", noCasas: "0"};
-		_BOARD_[4] = {id:"1", precio:"60", duenio:"-1", noCasas: "0"};
-		_BOARD_[5] = {id:"1", precio:"110", duenio:"-1", noCasas: "0"};
-		_BOARD_[6] = {id:"2", precio:"100", duenio:"-1", noCasas: "0"};
-		_BOARD_[7] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[8] = {id:"2", precio:"100", duenio:"-1", noCasas: "0"};
-		_BOARD_[9] = {id:"2", precio:"120", duenio:"-1", noCasas: "0"};
-		_BOARD_[10] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[11] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
-		_BOARD_[12] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
-		_BOARD_[13] = {id:"3", precio:"140", duenio:"-1", noCasas: "0"};
-		_BOARD_[14] = {id:"3", precio:"160", duenio:"-1", noCasas: "0"};
-		_BOARD_[15] = {id:"9", precio:"400", duenio:"-1", noCasas: "0"};
-		_BOARD_[16] = {id:"4", precio:"75", duenio:"-1", noCasas: "0"};
-		_BOARD_[17] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[18] = {id:"4", precio:"110", duenio:"-1", noCasas: "0"};
-		_BOARD_[19] = {id:"4", precio:"200", duenio:"-1", noCasas: "0"};
-		_BOARD_[20] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[21] = {id:"5", precio:"250", duenio:"-1", noCasas: "0"};
-		_BOARD_[22] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[23] = {id:"5", precio:"220", duenio:"-1", noCasas: "0"};
-		_BOARD_[24] = {id:"5", precio:"220", duenio:"-1", noCasas: "0"};
-		_BOARD_[25] = {id:"6", precio:"240", duenio:"-1", noCasas: "0"};
-		_BOARD_[26] = {id:"6", precio:"260", duenio:"-1", noCasas: "0"};
-		_BOARD_[27] = {id:"6", precio:"280", duenio:"-1", noCasas: "0"};
-		_BOARD_[28] = {id:"9", precio:"400", duenio:"-1", noCasas: "0"};
-		_BOARD_[29] = {id:"6", precio:"300", duenio:"-1", noCasas: "0"};
-		_BOARD_[30] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[31] = {id:"7", precio:"320", duenio:"-1", noCasas: "0"};
-		_BOARD_[32] = {id:"7", precio:"320", duenio:"-1", noCasas: "0"};
-		_BOARD_[33] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[34] = {id:"7", precio:"380", duenio:"-1", noCasas: "0"};
-		_BOARD_[35] = {id:"7", precio:"380", duenio:"-1", noCasas: "0"};
-		_BOARD_[36] = {id:"0", precio:"0", duenio:"-1", noCasas: "0"};
-		_BOARD_[37] = {id:"8", precio:"450", duenio:"-1", noCasas: "0"};
-		_BOARD_[38] = {id:"0", precio:"150", duenio:"-1", noCasas: "0"};
-		_BOARD_[39] = {id:"8", precio:"500", duenio:"-1", noCasas: "0"};
+		_JUGADORAS_[0].dinero = 1500;
+		_JUGADORAS_[1].dinero = 1500;
+		_BOARD_[0] = {id:"esquina", precio:"200", duenio:"-1", noCasas:"0", nombre:"inicio"};
+		_BOARD_[1] = {id:"cafe", precio:"60", duenio:"-1", noCasas:"0", nombre:"MEDITERRANEAN AVENUE"};
+		_BOARD_[2] = {id:"arca", precio:"0", duenio:"-1", noCasas:"0", nombre:"arca"};
+		_BOARD_[3] = {id:"cafe", precio:"60", duenio:"-1", noCasas:"0", nombre:"BALTIC AVENUE"};
+		_BOARD_[4] = {id:"impuestos", precio:"200", duenio:"-1", noCasas:"0", nombre:"impuestos"};
+		_BOARD_[5] = {id:"tren", precio:"200", duenio:"-1", noCasas:"0", nombre:"READING RAILROAD"};
+		_BOARD_[6] = {id:"cyan", precio:"100", duenio:"-1", noCasas:"0", nombre:"ORIENTAL AVENUE"};
+		_BOARD_[7] = {id:"fortuna", precio:"0", duenio:"-1", noCasas:"0", nombre:"fortuna"};
+		_BOARD_[8] = {id:"cyan", precio:"100", duenio:"-1", noCasas:"0", nombre:"VERMONT AVENUE "};
+		_BOARD_[9] = {id:"cyan", precio:"120", duenio:"-1", noCasas:"0", nombre:"CONNECTICUT AVENUE"};
+		_BOARD_[10] = {id:"esquina", precio:"0", duenio:"-1", noCasas:"0", nombre:"carcel"};
+		_BOARD_[11] = {id:"morado", precio:"140", duenio:"-1", noCasas:"0", nombre:"ST. CHARLES PLACE"};
+		_BOARD_[12] = {id:"servicio", precio:"150", duenio:"-1", noCasas:"0", nombre:"ELECTRIC COMPANY"};
+		_BOARD_[13] = {id:"morado", precio:"140", duenio:"-1", noCasas:"0", nombre:"STATES AVENUE"};
+		_BOARD_[14] = {id:"morado", precio:"160", duenio:"-1", noCasas:"0", nombre:"VIRGINIA AVENUE"};
+		_BOARD_[15] = {id:"tren", precio:"200", duenio:"-1", noCasas:"0", nombre:"PENNSYLVANIA RAILROAD"};
+		_BOARD_[16] = {id:"naranja", precio:"180", duenio:"-1", noCasas:"0", nombre:"ST. JAMES PLACES"};
+		_BOARD_[17] = {id:"arca", precio:"0", duenio:"-1", noCasas:"0", nombre:"arca"};
+		_BOARD_[18] = {id:"naranja", precio:"180", duenio:"-1", noCasas:"0", nombre:"TENNESSEE AVENUE"};
+		_BOARD_[19] = {id:"naranja", precio:"200", duenio:"-1", noCasas:"0", nombre:"NEW YORK AVENUE"};
+		_BOARD_[20] = {id:"esquina", precio:"0", duenio:"-1", noCasas:"0", nombre:"parada libre"};
+		_BOARD_[21] = {id:"rojo", precio:"220", duenio:"-1", noCasas:"0", nombre:"KENTUCKY AVENUE"};
+		_BOARD_[22] = {id:"fortuna", precio:"0", duenio:"-1", noCasas:"0", nombre:"fortuna"};
+		_BOARD_[23] = {id:"rojo", precio:"220", duenio:"-1", noCasas:"0", nombre:"INDIANA AVENUE"};
+		_BOARD_[24] = {id:"rojo", precio:"240", duenio:"-1", noCasas:"0", nombre:"ILLINOIS AVENUE"};
+		_BOARD_[25] = {id:"tren", precio:"200", duenio:"-1", noCasas:"0", nombre:"B&O RAILROAD"};
+		_BOARD_[26] = {id:"amarillo", precio:"260", duenio:"-1", noCasas:"0", nombre:"ATLANTIC AVENUE"};
+		_BOARD_[27] = {id:"amarillo", precio:"260", duenio:"-1", noCasas:"0", nombre:"VENTINOR AVENUE"};
+		_BOARD_[28] = {id:"servicio", precio:"150", duenio:"-1", noCasas:"0", nombre:"WATER WORKS"};
+		_BOARD_[29] = {id:"amarillo", precio:"280", duenio:"-1", noCasas:"0", nombre:"MARVIN GARDENS"};
+		_BOARD_[30] = {id:"esquina", precio:"0", duenio:"-1", noCasas:"0", nombre:"ir a carcel"};
+		_BOARD_[31] = {id:"verde", precio:"300", duenio:"-1", noCasas:"0", nombre:"PACIFIC AVENUE"};
+		_BOARD_[32] = {id:"verde", precio:"300", duenio:"-1", noCasas:"0", nombre:"NORTH CAROLINA AVENUE"};
+		_BOARD_[33] = {id:"arca", precio:"0", duenio:"-1", noCasas:"0", nombre:"arca"};
+		_BOARD_[34] = {id:"verde", precio:"320", duenio:"-1", noCasas:"0", nombre:"PENNSYLVANIA AVENUE"};
+		_BOARD_[35] = {id:"tren", precio:"200", duenio:"-1", noCasas:"0", nombre:"SHORT LINE"};
+		_BOARD_[36] = {id:"fortuna", precio:"0", duenio:"-1", noCasas:"0", nombre:"fortuna"};
+		_BOARD_[37] = {id:"rey", precio:"350", duenio:"-1", noCasas:"0", nombre:"PARK PLACE"};
+		_BOARD_[38] = {id:"impuestos", precio:"150", duenio:"-1", noCasas:"0", nombre:"impuestos"};
+		_BOARD_[39] = {id:"rey", precio:"400", duenio:"-1", noCasas:"0", nombre:"BOARDWALK"};
 		_DADO1_.src = "dado1.png";
 		_DADO1_.onload = function(){
 			_CTXGAME_.drawImage(_DADO1_, 250, 350, 50, 50);
@@ -341,14 +345,17 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 		_CTXGAME_.font = "15px Arial";
 		_VARIOSTURNOS_ = 1;
 		habilitaBotones();
-		_VARIOSTURNOS_ = 0;
-		actualizaPrints();
+		_VARIOSTURNOS_ = 0
+;		actualizaPrints();
 	}
 
 	function comprarPropiedad(){
-		_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].duenio = ""+_TURNO_;
-		_JUGADORAS_[_TURNO_].dinero = ""+(parseInt(_JUGADORAS_[_TURNO_].dinero)-parseInt(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio));
-		actualizaPrints();
+		var Jugadora = _JUGADORAS_[_TURNO_];
+		var Casilla = _BOARD_[parseInt(Jugadora.casilla)];
+		Casilla.duenio = ""+_TURNO_;
+		Jugadora.dinero = ""+(parseInt(Jugadora.dinero)-parseInt(Casilla.precio));
+		_PROPIEDADES_[_TURNO_].push(Casilla.nombre);
+		revisaEstado();
 	}
 
 	function colocarCasa(){
@@ -381,17 +388,26 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 	}
 
 	function revisaEstado(){
-		if(_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].id != "0") document.getElementById("comprarpropiedad"+_TURNO_).value = "Comprar propiedad (-"+_BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)].precio+")";
+		var Casilla = _BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)];
+		if(Casilla.id != "arca" && Casilla.id != "esquina" && Casilla.id != "fortuna")
+			document.getElementById("comprarpropiedad"+_TURNO_).value = "Comprar propiedad (-"+Casilla.precio+")";
 		habilitaBotones();
 		actualizaPrints();
+		if(isCambioTurno()){
+			cambiaTurno();
+			_VARIOSTURNOS_ = 1;
+			habilitaBotones();
+			actualizaPrints();
+		}
 	}
 
 	function moverPieza(){
-		var cas = parseInt(_JUGADORAS_[_TURNO_].casilla);
+		var Jugadora = _JUGADORAS_[_TURNO_];
+		var cas = parseInt(Jugadora.casilla);
 		var loop;
 		var loop2;
-		var aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
-		var aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
+		var aux_x = parseInt(Jugadora.x);
+		var aux_y = parseInt(Jugadora.y);
 		var corte = 0;
 		var iteracion = 10;
 		loop2 = setInterval(function(){
@@ -401,108 +417,132 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 			}
 		}, 500);
 		loop = setInterval(function(){
-			_CTXGAME_.clearRect(_JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
-			_JUGADORAS_[_TURNO_].img.src = "jugador"+_TURNO_+".png";
+			_CTXGAME_.clearRect(Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
+			Jugadora.img.src = "jugador"+_TURNO_+".png";
 			if(cas == 0){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+				Jugadora.img.onload = function(){
 					aux_x -= 85;
-					_JUGADORAS_[_TURNO_].x = aux_x.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.x = aux_x.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
-			else if(cas > 0 && cas < 10){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
-					if(cas == 9){if(_TURNO_==0) aux_x -= 63; else aux_x -= 73;}
-					else aux_x -= 51;
-					_JUGADORAS_[_TURNO_].x = aux_x.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+			else if(cas > 0 && cas < 9){
+				Jugadora.img.onload = function(){
+					aux_x -= 52;
+					Jugadora.x = aux_x.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
+					_CTXGAME_.stroke();
+				}
+				cas++;
+			}
+			else if(cas == 9){
+				Jugadora.img.onload = function(){
+					if(_TURNO_ == 0){
+						Jugadora.x = 40;
+						aux_x = 40;
+						Jugadora.y = 580;
+						aux_y = 580;
+					}
+					else{
+						Jugadora.x = 15;
+						aux_x = 15;
+						Jugadora.y = 610;
+						aux_y = 610;
+					}
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else if(cas == 10){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
-					if(_TURNO_==0) aux_y -= 63; else aux_y -= 73;
-					_JUGADORAS_[_TURNO_].y = aux_y.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+				Jugadora.img.onload = function(){
+					if(_TURNO_ == 0){
+						Jugadora.y = 520;
+						aux_y = 520;
+					}
+					else{
+						Jugadora.y = 500;
+						aux_y = 500;
+					}
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
-			else if(cas >= 10 && cas < 20){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+			else if(cas > 10 && cas < 20){
+				Jugadora.img.onload = function(){
 					if(cas == 19){if(_TURNO_==0) aux_y -= 63; else aux_y -= 73;}
 					else aux_y -= 51;
-					_JUGADORAS_[_TURNO_].y = aux_y.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.y = aux_y.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else if(cas == 20){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+				Jugadora.img.onload = function(){
 					aux_x += 65;
-					_JUGADORAS_[_TURNO_].x = aux_x.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.x = aux_x.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else if(cas > 20 && cas < 30){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+				Jugadora.img.onload = function(){
 					aux_x += 51;
-					_JUGADORAS_[_TURNO_].x = aux_x.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.x = aux_x.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else if(cas == 30){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+				Jugadora.img.onload = function(){
 					aux_y += 51;
-					_JUGADORAS_[_TURNO_].y = aux_y.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.y = aux_y.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else if(cas > 30 && cas < 39){
-				_JUGADORAS_[_TURNO_].img.onload = function(){
+				Jugadora.img.onload = function(){
 					aux_y += 51;
-					_JUGADORAS_[_TURNO_].y = aux_y.toString();
-					_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.y = aux_y.toString();
+					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 					_CTXGAME_.stroke();
 				}
 				cas++;
 			}
 			else{
 				if(_TURNO_ == 0){
-					_JUGADORAS_[_TURNO_].img.onload = function(){
-						_JUGADORAS_[_TURNO_].x = 600;
-						_JUGADORAS_[_TURNO_].y = 580;
-						aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
-						aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
-						_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.img.onload = function(){
+						Jugadora.x = 600;
+						Jugadora.y = 580;
+						aux_x = parseInt(Jugadora.x);
+						aux_y = parseInt(Jugadora.y);
+						_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 						_CTXGAME_.stroke();
 					}
 				}
 				else{
-					_JUGADORAS_[_TURNO_].img.onload = function(){
-						_JUGADORAS_[_TURNO_].x = 600;
-						_JUGADORAS_[_TURNO_].y = 610;
-						aux_x = parseInt(_JUGADORAS_[_TURNO_].x);
-						aux_y = parseInt(_JUGADORAS_[_TURNO_].y);
-						_JUGADORAS_[_TURNO_].y = aux_y.toString();
-						_CTXGAME_.drawImage(_JUGADORAS_[_TURNO_].img, _JUGADORAS_[_TURNO_].x, _JUGADORAS_[_TURNO_].y, _JUGADORAS_[_TURNO_].w, _JUGADORAS_[_TURNO_].h);
+					Jugadora.img.onload = function(){
+						Jugadora.x = 600;
+						Jugadora.y = 610;
+						aux_x = parseInt(Jugadora.x);
+						aux_y = parseInt(Jugadora.y);
+						Jugadora.y = aux_y.toString();
+						_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 						_CTXGAME_.stroke();
 					}
 				}
 				cas = 0;
 			}
 			corte++;
-			_JUGADORAS_[_TURNO_].casilla = cas.toString();
+			Jugadora.casilla = cas.toString();
 			if(corte == _DADOS_) clearInterval(loop);
 		}, 500);
 	}
@@ -517,12 +557,11 @@ para sair de la carcel hay tres formas, pagando, que te salgan los mismos numero
 	}
 
 	function startGameOnline(){
-		document.getElementById("tirardados1").style.display = "block";
-		document.getElementById("comprarpropiedad1").style.display = "block";
-		document.getElementById("colocarcasa1").style.display = "block";
 		document.getElementById("player1-name").innerHTML = document.getElementById("nick").value;
 		startANewGame();
 	}
+
+	deshabilitaTodo();
 </script>
 <!-- ================================================ -->
 
