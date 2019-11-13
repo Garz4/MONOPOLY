@@ -33,6 +33,23 @@
 	background-size: 650px 650px;
 }
 
+.monopolymoney {
+	-webkit-transform: rotate(-180deg); 
+    -moz-transform: rotate(-180deg);
+    -o-transform: rotate(-180deg);
+    transform: rotate(-180deg);
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    height:20px;
+    width:25px;
+}
+
+.inline-block{
+    display:-moz-inline-stack;
+    display:inline-block;
+    zoom:1;
+    *display:inline; 
+}
+
 button{
 	border:0;
 	padding:10px;
