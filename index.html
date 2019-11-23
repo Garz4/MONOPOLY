@@ -948,7 +948,7 @@
 			}
 		}
 	}
-
+//-------------------------------------------------------------------------------------------------------------------------------
 	function moverPieza(){
 		var Jugadora = _JUGADORAS_[_TURNO_];
 		var cas = parseInt(Jugadora.casilla);
@@ -958,6 +958,7 @@
 		var aux_y = parseInt(Jugadora.y);
 		var corte = 0;
 		var iteracion = 10;
+		var a = 53;
 		loop2 = setInterval(function(){
 			if(corte == _DADOS_){
 				revisaEstado();
@@ -970,105 +971,48 @@
 		loop = setInterval(function(){
 			_CTXGAME_.clearRect(Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 			Jugadora.img.src = "jugador"+_TURNO_+".png";
-			if(cas == 0){
-				Jugadora.img.onload = function(){
-					aux_x -= 85;
-					Jugadora.x = aux_x.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas > 0 && cas < 9){
-				Jugadora.img.onload = function(){
-					aux_x -= 52;
-					Jugadora.x = aux_x.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas == 9){
-				Jugadora.img.onload = function(){
-					if(_TURNO_ == 0){
-						Jugadora.x = 40;
-						aux_x = 40;
-						Jugadora.y = 580;
-						aux_y = 580;
-					}
-					else{
-						Jugadora.x = 15;
-						aux_x = 15;
-						Jugadora.y = 610;
-						aux_y = 610;
-					}
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas == 10){
-				Jugadora.img.onload = function(){
-					if(_TURNO_ == 0){
-						Jugadora.y = 520;
-						aux_y = 520;
-					}
-					else{
-						Jugadora.y = 500;
-						aux_y = 500;
-					}
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas > 10 && cas < 20){
-				Jugadora.img.onload = function(){
-					if(cas == 19){if(_TURNO_==0) aux_y -= 63; else aux_y -= 73;}
-					else aux_y -= 51;
-					Jugadora.y = aux_y.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas == 20){
-				Jugadora.img.onload = function(){
-					aux_x += 65;
-					Jugadora.x = aux_x.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas > 20 && cas < 30){
-				Jugadora.img.onload = function(){
-					aux_x += 51;
-					Jugadora.x = aux_x.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas == 30){
-				Jugadora.img.onload = function(){
-					aux_y += 51;
-					Jugadora.y = aux_y.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else if(cas > 30 && cas < 39){
-				Jugadora.img.onload = function(){
-					aux_y += 51;
-					Jugadora.y = aux_y.toString();
-					_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
-					_CTXGAME_.stroke();
-				}
-				cas++;
-			}
-			else{
+			if(cas == 0){if(_TURNO_ == 0){Jugadora.x = "520"; Jugadora.y = "580";} else{Jugadora.x = "520"; Jugadora.y = "610";} cas++;}
+			else if(cas == 1){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*1)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*1)); Jugadora.y = "610";} cas++;}
+			else if(cas == 2){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*2)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*2)); Jugadora.y = "610";} cas++;}
+			else if(cas == 3){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*3)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*3)); Jugadora.y = "610";} cas++;}
+			else if(cas == 4){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*4)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*4)); Jugadora.y = "610";} cas++;}
+			else if(cas == 5){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*5)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*5)); Jugadora.y = "610";} cas++;}
+			else if(cas == 6){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*6)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*6)); Jugadora.y = "610";} cas++;}
+			else if(cas == 7){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*7)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*7)); Jugadora.y = "610";} cas++;}
+			else if(cas == 8){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*8)); Jugadora.y = "580";} else{Jugadora.x = ""+(520-(a*8)); Jugadora.y = "610";} cas++;}
+			else if(cas == 9){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = "620";} else{Jugadora.x = "0"; Jugadora.y = "600";} cas++;}
+			else if(cas == 10){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*1));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*1));} cas++;}
+			else if(cas == 11){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*2));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*2));} cas++;}
+			else if(cas == 12){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*3));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*3));} cas++;}
+			else if(cas == 13){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*4));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*4));} cas++;}
+			else if(cas == 14){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*5));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*5));} cas++;}
+			else if(cas == 15){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*6));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*6));} cas++;}
+			else if(cas == 16){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*7));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*7));} cas++;}
+			else if(cas == 17){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*8));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*8));} cas++;}
+			else if(cas == 18){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = ""+(575-(a*9));} else{Jugadora.x = "10"; Jugadora.y = ""+(575-(a*9));} cas++;}
+			else if(cas == 19){if(_TURNO_ == 0){Jugadora.x = "40"; Jugadora.y = "40";} else{Jugadora.x = "10"; Jugadora.y = "10";} cas++;}
+			else if(cas == 20){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*8)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*8)); Jugadora.y = "10";} cas++;}
+			else if(cas == 21){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*7)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*7)); Jugadora.y = "10";} cas++;}
+			else if(cas == 22){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*6)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*6)); Jugadora.y = "10";} cas++;}
+			else if(cas == 23){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*5)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*5)); Jugadora.y = "10";} cas++;}
+			else if(cas == 24){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*4)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*4)); Jugadora.y = "10";} cas++;}
+			else if(cas == 25){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*3)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*3)); Jugadora.y = "10";} cas++;}
+			else if(cas == 26){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*2)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*2)); Jugadora.y = "10";} cas++;}
+			else if(cas == 27){if(_TURNO_ == 0){Jugadora.x = ""+(520-(a*1)); Jugadora.y = "40";} else{Jugadora.x = ""+(520-(a*1)); Jugadora.y = "10";} cas++;}
+			else if(cas == 28){if(_TURNO_ == 0){Jugadora.x = "520"; Jugadora.y = "40";} else{Jugadora.x = "520"; Jugadora.y = "10";} cas++;}
+			else if(cas == 29){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = "40";} else{Jugadora.x = "615"; Jugadora.y = "10";} cas++;}
+			else if(cas == 30){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*9));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*9));} cas++;}
+			else if(cas == 31){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*8));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*8));} cas++;}
+			else if(cas == 32){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*7));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*7));} cas++;}
+			else if(cas == 33){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*6));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*6));} cas++;}
+			else if(cas == 34){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*5));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*5));} cas++;}
+			else if(cas == 35){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*4));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*4));} cas++;}
+			else if(cas == 36){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*3));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*3));} cas++;}
+			else if(cas == 37){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*2));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*2));} cas++;}
+			else if(cas == 38){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*1));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*1));} cas++;}
+			else if(cas == 39){if(_TURNO_ == 0){Jugadora.x = "600"; Jugadora.y = "580";} else{Jugadora.x = "600"; Jugadora.y = "610";} cas++; cas = 0; Jugadora.dinero = ""+(parseInt(Jugadora.dinero)+200);}
+
+			/*else{
 				if(_TURNO_ == 0){
 					Jugadora.img.onload = function(){
 						Jugadora.x = "600";
@@ -1092,13 +1036,17 @@
 				}
 				cas = 0;
 				Jugadora.dinero = ""+(parseInt(Jugadora.dinero)+200);
+			}*/
+			Jugadora.img.onload = function(){
+				_CTXGAME_.drawImage(Jugadora.img, Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
+				_CTXGAME_.stroke();
 			}
 			corte++;
 			Jugadora.casilla = cas.toString();
 			if(corte == _DADOS_) clearInterval(loop);
 		}, 500);
 	}
-
+//-------------------------------------------------------------------------------------------------------------------------------
 	function displayPlayer(turno, val){
 		document.getElementById("tirardados"+turno).style.display = val;
 		document.getElementById("comprarpropiedad"+turno).style.display = val;
