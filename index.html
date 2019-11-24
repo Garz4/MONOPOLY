@@ -23,17 +23,17 @@
 							<input type="button" class="comando" id="comprarpropiedad0" onclick="comprarPropiedad()" value="Comprar propiedad" /><br />
 							<input type="button" class="comando" id="pasar0" onclick="pasar()" value="Pasar" /><br />
 							<hr />
-							<div id="propiedadescolocar0"></div><br />
+							<div id="imgcolocar0"></div><div id="propiedadescolocar0"></div><br />
 							<p id="noCasas0-colocar"></p><br />
 							<input type="button" class="comando" id="colocarcasa0" onclick="colocarCasa(0)" value="Colocar casa" /><br />
 							<input type="button" class="comando" id="colocarhotel0" onclick="colocarCasa(0)" value="Colocar hotel" /><br />
 							<hr />
-							<div id="propiedadesvender0"></div><br />
+							<div id="imgvender0"></div><div id="propiedadesvender0"></div><br />
 							<p id="noCasas0-vender"></p><br />
 							<input type="button" class="comando" id="vendercasa0" onclick="venderCasa(0)" value="Vender casa" /><br />
 							<input type="button" class="comando" id="venderhotel0" onclick="venderHotel(0)" value="Vender hotel" /><br />
 							<hr />
-							<div id="propiedadvender0"></div><br />
+							<div id="imgvender-p0"></div><div id="propiedadvender0"></div><br />
 							<p id="noCasas0-vender-p"></p><br />
 							<input type="button" class="comando" id="venderpropiedad0" onclick="venderPropiedad(0)" value="Vender propiedad" /><br />
 							<hr />
@@ -50,17 +50,17 @@
 							<input type="button" class="comando" id="comprarpropiedad1" onclick="comprarPropiedad()" value="Comprar propiedad" /><br />
 							<input type="button" class="comando" id="pasar1" onclick="pasar()" value="Pasar" /><br />
 							<hr />
-							<div id="propiedadescolocar1"></div><br />
+							<div id="imgcolocar1"></div><div id="propiedadescolocar1"></div><br />
 							<p id="noCasas1-colocar"></p><br />
 							<input type="button" class="comando" id="colocarcasa1" onclick="colocarCasa(1)" value="Colocar casa" /><br />
 							<input type="button" class="comando" id="colocarhotel1" onclick="colocarCasa(1)" value="Colocar hotel" /><br />
 							<hr />
-							<div id="propiedadesvender1"></div><br />
+							<div id="imgvender1"></div><div id="propiedadesvender1"></div><br />
 							<p id="noCasas1-vender"></p><br />
 							<input type="button" class="comando" id="vendercasa1" onclick="venderCasa(1)" value="Vender casa" /><br />
 							<input type="button" class="comando" id="venderhotel1" onclick="venderHotel(1)" value="Vender hotel" /><br />
 							<hr />
-							<div id="propiedadvender1"></div><br />
+							<div id="imgvender-p1"></div><div id="propiedadvender1"></div><br />
 							<p id="noCasas1-vender-p"></p><br />
 							<input type="button" class="comando" id="venderpropiedad1" onclick="venderPropiedad(1)" value="Vender propiedad" /><br />
 							<hr />
@@ -83,6 +83,12 @@
 
 <!-- ==================== MAIN ====================== -->
 <script type="text/javascript">
+	var _AUDIOESQUINAINICIO_ = new Audio("a7_cartas.mp3");
+	var _AUDIOCOLOCARCASA_ = new Audio("a6_monedas.mp3");
+	var _AUDIOINICIO_ = new Audio("a1_inicio.mp3");
+	var _AUDIOMOVER_ = new Audio("a2_mover.mp3");
+	var _AUDIOCOMPRARPROPIEDAD_ = new Audio("a4_monedas.mp3");
+	var _AUDIODADOS_ = new Audio("a5_dados.mp3");
 	var _VSIAFLAG_ = 0;
 	var _FORTUNA_ = new Array();
 	_FORTUNA_.push({texto:"Estreno de la gran ópera, recibiste $50 de la enemiga.", op:"++", num:"50"});
@@ -157,7 +163,6 @@
 
 <!-- ==================== GAME ====================== -->
 <script type="text/javascript">
-	var _CASAS_ = new Array();
 	var _TURNO_ = 0;
 	var _DADOS_ = 0;
 	var _BOARD_ = new Array();
@@ -284,7 +289,7 @@
 				document.getElementById("salircarcel1").value = "Salir de la carcel";
 			}
 		}
-		if(_PROPIEDADES_[0].length > 0){
+		/*if(_PROPIEDADES_[0].length > 0){
 			var e = document.getElementById("selectcolocar0");
 			var estado = buscarEstadoPropiedad(e.options[e.selectedIndex].value);
 			if(estado.id != "impuestos" && estado.id != "arca" && estado.id != "esquina" && estado.id != "servicio" && estado.precioCasa != "0"){
@@ -397,7 +402,7 @@
 			deshabilita("vendercasa1", true);
 			deshabilita("venderhotel1", true);
 			deshabilita("venderpropiedad1", true);
-		}
+		}*/
 	}
 
 	function pasar(){
@@ -497,10 +502,26 @@
 		}
 	}
 
+	function refreshNoCasas(idSelect, idP, idIMG){
+		var e = document.getElementById(idSelect);
+		var estado = buscarEstadoPropiedad(e.options[e.selectedIndex].value);
+		if(estado.id == "cafe") document.getElementById(idIMG).innerHTML = "<img src='p2.png' width='10' height='10'>";
+		else if(estado.id == "cyan") document.getElementById(idIMG).innerHTML = "<img src='p3.png' width='10' height='10'>";
+		else if(estado.id == "morado") document.getElementById(idIMG).innerHTML = "<img src='p4.png' width='10' height='10'>";
+		else if(estado.id == "naranja") document.getElementById(idIMG).innerHTML = "<img src='p5.png' width='10' height='10'>";
+		else if(estado.id == "rojo") document.getElementById(idIMG).innerHTML = "<img src='p6.png' width='10' height='10'>";
+		else if(estado.id == "amarillo") document.getElementById(idIMG).innerHTML = "<img src='p7.png' width='10' height='10'>";
+		else if(estado.id == "verde") document.getElementById(idIMG).innerHTML = "<img src='p8.png' width='10' height='10'>";
+		else if(estado.id == "rey") document.getElementById(idIMG).innerHTML = "<img src='p9.png' width='10' height='10'>";
+		else document.getElementById(idIMG).innerHTML = "<img src='p1.png' width='10' height='10'>";
+		if(parseInt(estado.noCasas) < 5) document.getElementById(idP).innerHTML = "Casas: "+estado.noCasas;
+		else document.getElementById(idP).innerHTML = "Hotel adquirido";
+	}
+
 	function refreshSelect(Turn){
-		refreshNoCasas("selectcolocar"+Turn, "noCasas"+Turn+"-colocar");
-		refreshNoCasas("selectvendercasas"+Turn, "noCasas"+Turn+"-vender");
-		refreshNoCasas("selectvender"+Turn, "noCasas"+Turn+"-vender-p");
+		refreshNoCasas("selectcolocar"+Turn, "noCasas"+Turn+"-colocar", "imgcolocar"+Turn);
+		refreshNoCasas("selectvendercasas"+Turn, "noCasas"+Turn+"-vender", "imgvender"+Turn);
+		refreshNoCasas("selectvender"+Turn, "noCasas"+Turn+"-vender-p", "imgvender-p"+Turn);
 		refreshBotones(Turn);
 	}
 
@@ -522,13 +543,6 @@
 		}
 		retorno += "</select>";
 		return retorno;
-	}
-
-	function refreshNoCasas(idSelect, idP){
-		var e = document.getElementById(idSelect);
-		var estado = buscarEstadoPropiedad(e.options[e.selectedIndex].value);
-		if(parseInt(estado.noCasas) < 5) document.getElementById(idP).innerHTML = "Casas: "+estado.noCasas;
-		else document.getElementById(idP).innerHTML = "Hotel adquirido";
 	}
 
 	function actualizaDinero(){
@@ -559,6 +573,8 @@
 	}
 
 	function startANewGame(){
+		if(_AUDIOINICIO_.currentTime > 0 && !_AUDIOINICIO_.paused){var clon = _AUDIOINICIO_.cloneNode(); clon.play();}
+		_AUDIOINICIO_.play();
 		var Jugadora1 = _JUGADORAS_[0];
 		var Jugadora2 = _JUGADORAS_[1];
 		_CTXGAME_.clearRect(Jugadora1.x, Jugadora1.y, Jugadora1.w, Jugadora1.h);
@@ -661,6 +677,8 @@
 	}
 
 	function comprarPropiedad(){
+		if(_AUDIOCOMPRARPROPIEDAD_.currentTime > 0 && !_AUDIOCOMPRARPROPIEDAD_.paused){var clon = _AUDIOCOMPRARPROPIEDAD_.cloneNode(); clon.play();}
+		_AUDIOCOMPRARPROPIEDAD_.play();
 		var Jugadora = _JUGADORAS_[_TURNO_];
 		var Casilla = _BOARD_[parseInt(Jugadora.casilla)];
 		if(Casilla.id == "tren"){
@@ -697,6 +715,8 @@
 	}
 
 	function colocarCasa(turno){
+		if(_AUDIOCOLOCARCASA_.currentTime > 0 && !_AUDIOCOLOCARCASA_.paused){var clon = _AUDIOCOLOCARCASA_.cloneNode(); clon.play();}
+		_AUDIOCOLOCARCASA_.play();
 		var e = document.getElementById("selectcolocar"+turno);
 		var estado = buscarIndexEstado(e.options[e.selectedIndex].value);
 
@@ -722,14 +742,16 @@
 		var index = buscarIndexPropiedad(e.options[e.selectedIndex].value, turno);
 		_BOARD_[estado].duenio = "-1";
 		_PROPIEDADES_[turno].splice(index, 1);
-		_JUGADORAS_[turno].dinero = ""+(parseInt(_JUGADORAS_[turno].dinero) + parseInt(_BOARD_[estado].precio)*5);
+		_JUGADORAS_[turno].dinero = ""+(parseInt(_JUGADORAS_[turno].dinero) + parseInt(_BOARD_[estado].precio));
 		actualizaPrints();
 		actualizaDinero();
 		habilitaBotones();
-		refreshSelect(turno);
+		if(_PROPIEDADES_[turno].length > 0) refreshSelect(turno);
 	}
 
 	function tirarDados(){
+		if(_AUDIODADOS_.currentTime > 0 && !_AUDIODADOS_.paused){var clon = _AUDIODADOS_.cloneNode(); clon.play();}
+		_AUDIODADOS_.play();
 		var Jugadora = _JUGADORAS_[_TURNO_];
 		var dadouno = Math.floor(Math.random() * 6) + 1;
 		var dadodos = Math.floor(Math.random() * 6) + 1;
@@ -934,13 +956,14 @@
 				}
 			}
 			actualizaPrints();
-			//refreshSelect(_TURNO_);
+			if(_PROPIEDADES_[_TURNO_].length > 0) refreshSelect(_TURNO_);
 			habilitaBotones();
 			if(isCambioTurno()){
+				if(_PROPIEDADES_[_TURNO_].length > 0) refreshSelect(_TURNO_);
 				cambiaTurno();
 				_VARIOSTURNOS_ = 1;
 				actualizaPrints();
-				//refreshSelect(_TURNO_);
+				if(_PROPIEDADES_[_TURNO_].length > 0) refreshSelect(_TURNO_);
 				habilitaBotones();
 				if(_VSIAFLAG_ == 1 && _TURNO_ == 1){
 					agenteJugadora();
@@ -962,6 +985,7 @@
 		loop2 = setInterval(function(){
 			if(corte == _DADOS_){
 				revisaEstado();
+				
 				clearInterval(loop2);
 				if(_VSIAFLAG_ == 1 && _TURNO_ == 1){
 					heuristicaDecide();
@@ -969,6 +993,8 @@
 			}
 		}, 500);
 		loop = setInterval(function(){
+			if(_AUDIOMOVER_.currentTime > 0 && !_AUDIOMOVER_.paused){var clon = _AUDIOMOVER_.cloneNode(); clon.play();}
+			_AUDIOMOVER_.play();
 			_CTXGAME_.clearRect(Jugadora.x, Jugadora.y, Jugadora.w, Jugadora.h);
 			Jugadora.img.src = "jugador"+_TURNO_+".png";
 			if(cas == 0){if(_TURNO_ == 0){Jugadora.x = "520"; Jugadora.y = "580";} else{Jugadora.x = "520"; Jugadora.y = "610";} cas++;}
@@ -1010,7 +1036,7 @@
 			else if(cas == 36){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*3));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*3));} cas++;}
 			else if(cas == 37){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*2));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*2));} cas++;}
 			else if(cas == 38){if(_TURNO_ == 0){Jugadora.x = "575"; Jugadora.y = ""+(575-(a*1));} else{Jugadora.x = "615"; Jugadora.y = ""+(575-(a*1));} cas++;}
-			else if(cas == 39){if(_TURNO_ == 0){Jugadora.x = "600"; Jugadora.y = "580";} else{Jugadora.x = "600"; Jugadora.y = "610";} cas++; cas = 0; Jugadora.dinero = ""+(parseInt(Jugadora.dinero)+200);}
+			else if(cas == 39){if(_TURNO_ == 0){Jugadora.x = "600"; Jugadora.y = "580";} else{Jugadora.x = "600"; Jugadora.y = "610";} cas++; cas = 0; Jugadora.dinero = ""+(parseInt(Jugadora.dinero)+200); _AUDIOESQUINAINICIO_.play();}
 
 			/*else{
 				if(_TURNO_ == 0){
@@ -1063,6 +1089,9 @@
 		document.getElementById("propiedadvender"+turno).style.display = val;
 		document.getElementById("noCasas"+turno+"-vender-p").style.display = val;
 		document.getElementById("salircarcel"+turno).style.display = val;
+		document.getElementById("imgcolocar"+turno).style.display = val;
+		document.getElementById("imgvender"+turno).style.display = val;
+		document.getElementById("imgvender-p"+turno).style.display = val;
 	}
 
 	function startGameOffline(){
