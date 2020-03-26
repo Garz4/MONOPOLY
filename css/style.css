@@ -28,13 +28,13 @@
 }
 
 .tablero {
-	background-image: url("tablero.jpg");
+	background-image: url("../imgs/tablero.jpg");
 	background-repeat: no-repeat;
 	background-size: 650px 650px;
 }
 
 .monopolymoney {
-	-webkit-transform: rotate(-180deg); 
+	-webkit-transform: rotate(-180deg);
     -moz-transform: rotate(-180deg);
     -o-transform: rotate(-180deg);
     transform: rotate(-180deg);
@@ -47,7 +47,7 @@
     display:-moz-inline-stack;
     display:inline-block;
     zoom:1;
-    *display:inline; 
+    *display:inline;
 }
 
 button{
