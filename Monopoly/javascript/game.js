@@ -3,29 +3,30 @@ var _DADOS_ = 0;
 var _BOARD_ = new Array();
 var _VARIOSTURNOS_ = 0;
 
-for(var i = 0; i < 40; i++) _BOARD_.push({});
+for (var i = 0; i < 40; i++) _BOARD_.push({});
 
 var _PROPIEDADES_ = new Array();
 _PROPIEDADES_.push(new Array());
 _PROPIEDADES_.push(new Array());
 
-function flipBit(bit){
-  if(bit == 0) return 1;
-  else if(bit == 1) return 0;
+function flipBit(bit) {
+  if (bit == 0) return 1;
+  else if (bit == 1) return 0;
 }
 
-function cambiaTurno(){
-  if(_TURNO_ == 0) _TURNO_ = 1;
+function cambiaTurno() {
+  if (_TURNO_ == 0) _TURNO_ = 1;
   else _TURNO_ = 0;
 }
 
-function deshabilita(nom, val){
+function deshabilita(nom, val) {
   document.getElementById(nom).disabled = val;
-  if(val) document.getElementById(nom).setAttribute("class", "disabled");
+
+  if (val) document.getElementById(nom).setAttribute("class", "disabled");
   else document.getElementById(nom).setAttribute("class", "comando");
 }
 
-function deshabilitaTodo(){
+function deshabilitaTodo() {
   deshabilita("tirardados0", true);
   deshabilita("comprarpropiedad0", true);
   deshabilita("colocarcasa0", true);
@@ -46,27 +47,29 @@ function deshabilitaTodo(){
   deshabilita("salircarcel1", true);
 }
 
-function isCambioTurno(){
-  if(document.getElementById("tirardados"+_TURNO_).disabled == true &&
-    document.getElementById("comprarpropiedad"+_TURNO_).disabled == true)
+function isCambioTurno() {
+  if (document.getElementById("tirardados"+_TURNO_).disabled == true &&
+      document.getElementById("comprarpropiedad"+_TURNO_).disabled == true) {
     return true;
-  else return false;
+  } else {
+    return false;
+  }
 }
 
-function habilitaBotones(){
+function habilitaBotones() {
   var Casilla = _BOARD_[parseInt(_JUGADORAS_[_TURNO_].casilla)];
   var Jugadora = _JUGADORAS_[_TURNO_];
-  if(_TURNO_ == 0){
-    if(_VARIOSTURNOS_ == 0){
+
+  if (_TURNO_ == 0) {
+    if (_VARIOSTURNOS_ == 0) {
       deshabilita("tirardados0", true);
-    }
-    else{
+    } else{
       deshabilita("tirardados0", false);
     }
-    if((parseInt(Casilla.precio) > parseInt(Jugadora.dinero)) || (Casilla.id == "arca") || (Casilla.id == "esquina") || (Casilla.id == "impuestos") || (Casilla.id == "fortuna") || (Casilla.duenio != "-1")){
+
+    if ((parseInt(Casilla.precio) > parseInt(Jugadora.dinero)) || (Casilla.id == "arca") || (Casilla.id == "esquina") || (Casilla.id == "impuestos") || (Casilla.id == "fortuna") || (Casilla.duenio != "-1")){
       deshabilita("comprarpropiedad0", true);
-    }
-    else{
+    } else{
       deshabilita("comprarpropiedad0", false);
     }
     if(document.getElementById("comprarpropiedad0").disabled == false && document.getElementById("tirardados0").disabled == true){
